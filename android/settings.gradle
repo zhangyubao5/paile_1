@@ -1,0 +1,3 @@
+rootProject.name = 'paile_1'
+
+include ':app'

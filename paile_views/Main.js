@@ -3,6 +3,7 @@ var Account = require('./views/Account');
 var CemeraScan = require('./views/CameraScan');
 var Detail = require('./views/Detail');
 var Router = require('react-native-router');
+var DisplayProjection = require('./utilities/DisplayProjection');
 
 var {
   AppRegistry,
@@ -56,7 +57,8 @@ var Main = React.createClass({
         "longitude": 0,
         "latitude": 0
        },
-       headingData: 0
+       headingData: 0,
+       displayPlaces: []
     }
   },
 
@@ -102,6 +104,40 @@ var Main = React.createClass({
     DeviceEventEmitter.addListener('headingUpdated', (data) => {
       var state = this.state;
       state.headingData = data.heading;
+      this.setState(state);
+    });
+
+    setInterval(this.updatePlaces, 1000);
+  },
+
+  updatePlaces() {
+    var currentPosition = {
+      lat: 39.647546,
+      lng: -75.782203
+    };
+    var placeList = [];
+    var place1 = {
+      lat: 39.65,
+      lng: -75.8,
+      title: 'place1'
+    };
+    placeList.push(place1);
+    var place2 = {
+      lat: 39.5,
+      lng: -76,
+      title: 'place2'
+    };
+    placeList.push(place2);
+    var place3 = {
+      lat: 39.65,
+      lng: -75.5,
+      title: 'place3'
+    };
+    placeList.push(place3);
+    DisplayProjection.getPlacesWithinInterval(this.state.geoData,this.state.headingData,0,placeList, (data) => {
+      var state = this.state;
+      state.displayPlaces = data;
+      alert(data);
       this.setState(state);
     });
   },
@@ -163,35 +199,39 @@ var Main = React.createClass({
   //     }, geo_options);
   // },
 
+
+
   render() {
     //var motionData = this.state.motionData;
+    var places = [];
     return (
         <Camera 
           ref="cam"
           style={styles.container}
           type={this.state.cameraType}
-        >
-        	<Text style={styles.btn} ref='account' onPress={this._loadAccount}>Account</Text>
-            <Text>
-              <Text> 经纬度: </Text>
-                {this.state.geoData.longitude},
-                {this.state.geoData.latitude}
-            </Text>
-
-            <Text>
-              <Text>朝向: </Text>
-              {this.state.headingData}
-            </Text>
-            <Text>
-              <Text>水平角度: </Text>
-              {this.state.gycroZTheta? 
-              this.state.gycroZTheta : null}
-            </Text>
-
-          <Text style={styles.btn} onPress={this._switchCamera}>Switch Camera</Text>
-          <Text style={styles.btn} onPress={this._takePicture}>Take Photo</Text>
-        </Camera>
-      );
+        >    
+        <Text style={styles.btn} ref='account' onPress={this._loadAccount}>Account</Text>
+          {this.state.displayPlaces.map(function(placeInfo){
+            var x = parseInt(placeInfo.bottom);
+            var y = parseInt(placeInfo.right);
+            return (<View
+              title={placeInfo.title}
+            style={{
+              width: 150,
+              height: 30,
+              marginRight: x,
+              marginBottom: y,
+              overflow: 'hidden',
+              borderWidth: 0.5,
+            }}>
+            <View style={{width: 200, height: 20}}>
+              <Text>{placeInfo.title}</Text>
+            </View>
+          </View>);
+          })}
+    </Camera>
+    );
+    
   },
   // _onBarCodeRead: function() {
   //   console.log(e);

@@ -8,11 +8,31 @@ var {
 var CameraScan = React.createClass({
 	render() {
 		return(
-			<View style={styles.welcome}>
-        <Text style={styles.instructions}>
-          建设中。。。
-        </Text>
-      </View>
+			<Camera 
+          ref="cam"
+          style={styles.container}
+          type={this.state.cameraType}
+        >
+          <Text style={styles.btn} ref='account' onPress={this._loadAccount}>Account</Text>
+            <Text>
+              <Text> 经纬度: </Text>
+                {this.state.geoData.longitude},
+                {this.state.geoData.latitude}
+            </Text>
+
+            <Text>
+              <Text>朝向: </Text>
+              {this.state.headingData}
+            </Text>
+            <Text>
+              <Text>水平角度: </Text>
+              {this.state.gycroZTheta? 
+              this.state.gycroZTheta : null}
+            </Text>
+
+          <Text style={styles.btn} onPress={this._switchCamera}>Switch Camera</Text>
+          <Text style={styles.btn} onPress={this._takePicture}>Take Photo</Text>
+        </Camera>
       );
 	},
 });

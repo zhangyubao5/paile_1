@@ -119,19 +119,22 @@ var Main = React.createClass({
     var place1 = {
       lat: 39.65,
       lng: -75.8,
-      title: 'place1'
+      title: 'place1',
+      distance: 0
     };
     placeList.push(place1);
     var place2 = {
       lat: 39.5,
       lng: -76,
-      title: 'place2'
+      title: 'place2',
+      distance: 0
     };
     placeList.push(place2);
     var place3 = {
       lat: 39.65,
       lng: -75.5,
-      title: 'place3'
+      title: 'place3', 
+      distance: 0
     };
     placeList.push(place3);
     DisplayProjection.getPlacesWithinInterval(this.state.geoData,this.state.headingData,0,placeList, (data) => {

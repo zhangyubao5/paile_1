@@ -23,7 +23,7 @@ function getPlacesWithinInterval(currentPosition, heading, maxDistanceFilter, pl
 			eastAngle = 180*(Math.PI+delta)/Math.PI+180;
 		}
 		placeAngles.push(eastAngle);
-		//placeList[i].distance = 
+		placeList[i].distance = Math.sqrt(diff_lat*diff_lat+diff_lng*diff_lng);
 	}
 
 	var northHeading = 360-heading;

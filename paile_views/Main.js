@@ -140,7 +140,6 @@ var Main = React.createClass({
     DisplayProjection.getPlacesWithinInterval(this.state.geoData,this.state.headingData,0,placeList, (data) => {
       var state = this.state;
       state.displayPlaces = data;
-      alert(data);
       this.setState(state);
     });
   },
